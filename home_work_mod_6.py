@@ -70,5 +70,7 @@ def remove_empty_folders(folder_path):
 
 if __name__ == "__main__":
     create_folders_from_list(path, extensions)
+    get_subfolder_paths(path)
+    get_file_paths(path)
     sort_files(path)
     remove_empty_folders(path)

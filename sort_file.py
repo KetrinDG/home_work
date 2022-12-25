@@ -1,8 +1,8 @@
 import shutil #для высокоуровневого взаимодействия с объектами системы
 import os #для получения информации о файлах
 
-path = r'C:Users/user/Desktop/Хлам'  # папка сортировки
-folder_move = r'C:/Users/user/Desktop'  # папка куда будет переноситься
+path = input('Input folder path: ')  # папка сортировки
+folder_move = input('Input move folder path: ')  # папка куда будет переноситься
 
 # массив форматов файлов
 video_format = ['AVI', 'MP4', 'MOV', 'MKV']
