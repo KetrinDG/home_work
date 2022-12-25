@@ -1,7 +1,7 @@
 import shutil
 import os #для получения информации о файлах
 
-path = r'C:/user/Desktop/Хлам'  # папка сортировки
+path = input('Input folder path: ')  # папка сортировки
 
 # Ключи - названия папок. Значения - расширения файлов для каждой отдельной папки.
 extensions = {
@@ -26,24 +26,24 @@ extensions = {
 }
 
 # Напишем функцию для создания папок из списка названий
-def create_folders_from_list(path, extensions):
-    for folder in extensions:
-        if not os.path.exists(f'{path}\\{folder}'):
-            os.mkdir(f'{path}\\{folder}')
+def create_folders_from_list(folder_path, folder_names):
+    for folder in folder_names:
+        if not os.path.exists(f'{folder_path}\\{folder}'):
+            os.mkdir(f'{folder_path}\\{folder}')
 
 # для получения путей подпапок
-def get_subfolder_paths(path) -> list:
-    subfolder_paths = [f.path for f in os.scandir(path) if f.is_dir()]
+def get_subfolder_paths(folder_path) -> list:
+    subfolder_paths = [f.path for f in os.scandir(folder_path) if f.is_dir()]
     return subfolder_paths
 
 # пути всех файлов в папке
-def get_file_paths(path) -> list:
-    file_paths = [f.path for f in os.scandir(path) if not f.is_dir()]
+def get_file_paths(folder_path) -> list:
+    file_paths = [f.path for f in os.scandir(folder_path) if not f.is_dir()]
     return file_paths
 
 # сортировка файлов
-def sort_files(path):
-    file_paths = get_file_paths(path)  # пути файлов
+def sort_files(folder_path):
+    file_paths = get_file_paths(folder_path)  # пути файлов
     ext_list = list(extensions.items())  # cоздаем переменную со списком метода словаря
     # цикл для каждого пути файла в списке
     for file_path in file_paths:
@@ -61,11 +61,14 @@ def sort_files(path):
                 shutil.move(file, n_path)
 
 # удаляем пустые папки
-def remove_empty_folders(path):
-    subfolder_paths = get_subfolder_paths(path)
+def remove_empty_folders(folder_path):
+    subfolder_paths = get_subfolder_paths(folder_path)
     for p in subfolder_paths:
         if not os.listdir(p):
             print('Deleting empty folder:', p.split('\\')[-1], '\n')
             os.rmdir(p)
 
-
+if __name__ == "__main__":
+    create_folders_from_list(path, extensions)
+    sort_files(path)
+    remove_empty_folders(path)
