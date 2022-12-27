@@ -57,23 +57,31 @@ def get_file_paths(folder_path) -> list:
 def sort_files(folder_path):
     file_paths = get_file_paths(folder_path)  # пути файлов
     file_path: os.path
-    for file_path in file_paths:
+    for file_path in Path(folder_path).glob('**/*'):
+        if file_path.is_dir():
+            continue
         moved = False
         file = Path(file_path)
-        extension = file.suffix.replace('.', '')
+        extension = file.suffix.replace('.', '').lower()
         file_name = file.name
-        for f in Path.home().iterdir():
-            print(f.name)
+
+        # распаковка архивов
+        if extension in CATEGORIES['archives']:
+            shutil.unpack_archive(file, os.path.join(folder_path, 'archives', file_name))
+            continue
+
         # цикл внутри
         for category, extensions in CATEGORIES.items():
             if extension in extensions:
                 print(f'Moving {file_path} in {category} folder\n')
-                os.rename(file_path, os.path.join(path, category,  file_name))
+                os.rename(file_path, os.path.join(path, category, file_name))
                 moved = True
                 break
         if not moved:
             file_destination = os.path.join(folder_path, 'unknowns')
-            os.rename(file_path, os.path.join(file_destination, file_name ))
+            os.rename(file_path, os.path.join(file_destination, file_name))
+
+
 
 # удаляем пустые папки
 def remove_empty_folders(folder_path):
